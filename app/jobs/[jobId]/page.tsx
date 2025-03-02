@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { getJobById } from "@/app/lib/jobs";
+import { getJobById } from "@/app/lib/api-client";
 import { useAuth } from "@/app/lib/contexts/auth-context";
 import Navbar from "@/app/ui/navbar";
 import { Company, Job } from "@/app/lib/definitions";

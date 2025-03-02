@@ -189,3 +189,12 @@ model Job {
   company        Company   @relation(fields: [companyId], references: [id])
 }
 
+model Category {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  imageUrl    String?
+  quizCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

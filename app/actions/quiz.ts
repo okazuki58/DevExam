@@ -1,30 +1,7 @@
-// app/lib/data.ts
-import {
-  Badge,
-  QuizCategory,
-  QuizResult,
-  Quiz,
-} from "./definitions";
-import { prisma } from "./db";
+"use server";
 
-// テストカテゴリ
-export const quizCategories: QuizCategory[] = [
-  {
-    id: "cat-001",
-    name: "Web開発",
-    description: "Webの仕組みやプロトコル、URLの構造などに関する問題です。",
-    imageUrl: "/categories/web-development.svg",
-    quizCount: 0, // 後で動的に更新
-  },
-  {
-    id: "cat-002",
-    name: "開発プロセス",
-    description:
-      "バージョン管理システムとチーム開発の基礎知識に関する問題です。",
-    imageUrl: "/categories/development-process.svg",
-    quizCount: 0, // 後で動的に更新
-  },
-];
+import { prisma } from "../lib/prisma";
+import { Quiz, QuizResult, Badge } from "../lib/definitions";
 
 // すべてのクイズを取得
 export async function getQuizzes(): Promise<Quiz[]> {
@@ -37,13 +14,6 @@ export async function getQuizzes(): Promise<Quiz[]> {
       orderBy: {
         createdAt: "asc",
       },
-    });
-
-    // カテゴリごとのクイズ数を更新
-    quizCategories.forEach((category) => {
-      category.quizCount = quizzes.filter(
-        (q) => q.category === category.name
-      ).length;
     });
 
     return quizzes as unknown as Quiz[];
@@ -68,42 +38,6 @@ export async function getQuizById(id: string): Promise<Quiz | null> {
   } catch (error) {
     console.error(`ID: ${id} のクイズの取得に失敗しました:`, error);
     throw new Error("クイズの取得に失敗しました");
-  }
-}
-
-// ユーザーの統計情報を取得
-export async function getUserStats(userId: string) {
-  try {
-    // ユーザーのクイズ結果を取得
-    const quizResults = await prisma.quizResult.findMany({
-      where: { userId },
-      orderBy: { completedAt: "desc" },
-    });
-
-    // クイズ名を追加
-    const quizResultsWithNames = await Promise.all(
-      quizResults.map(async (result) => {
-        const quiz = await prisma.quiz.findUnique({
-          where: { id: result.quizId },
-          select: { name: true },
-        });
-
-        return {
-          ...result,
-          quizName: quiz ? quiz.name : "不明なテスト",
-        };
-      })
-    );
-
-    // ユーザーのバッジを取得
-    const badges = await prisma.badge.findMany({
-      where: { userId },
-    });
-
-    return { quizResults: quizResultsWithNames, badges };
-  } catch (error) {
-    console.error("ユーザー統計情報の取得に失敗しました:", error);
-    throw new Error("ユーザー統計情報の取得に失敗しました");
   }
 }
 
@@ -186,5 +120,20 @@ export async function saveQuizResult(
   } catch (error) {
     console.error("テスト結果の保存に失敗しました:", error);
     throw new Error("テスト結果の保存に失敗しました");
+  }
+}
+
+export async function getCategories() {
+  try {
+    const categories = await prisma.category.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    });
+    
+    return categories;
+  } catch (error) {
+    console.error("カテゴリの取得に失敗しました:", error);
+    throw new Error("カテゴリの取得に失敗しました");
   }
 }

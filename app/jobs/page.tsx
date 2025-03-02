@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/app/lib/contexts/auth-context";
-import { getJobs, getEligibleJobs } from "@/app/lib/jobs";
+import { getJobs, getEligibleJobs } from "@/app/lib/api-client";
 import { Job } from "@/app/lib/definitions";
 import Navbar from "@/app/ui/navbar";
 import JobCard from "@/app/ui/company/job-card";

@@ -3,35 +3,38 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "@/app/ui/navbar";
-import { quizCategories } from "@/app/lib/data";
 import { useAuth } from "@/app/lib/contexts/auth-context";
-import { Quiz } from "@/app/lib/definitions";
+import { Quiz, QuizCategory } from "@/app/lib/definitions";
+import { fetchCategories, fetchQuizzes } from "../lib/api-client";
 
 export default function QuizzesPage() {
   const { user } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [categories, setCategories] = useState<QuizCategory[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // クイズデータの取得
+  // クイズとカテゴリのデータ取得
   useEffect(() => {
-    async function fetchQuizzes() {
+    async function fetchData() {
       try {
-        const response = await fetch("/api/quizzes");
-        if (!response.ok) {
-          throw new Error("クイズの取得に失敗しました");
-        }
-        const data = await response.json();
-        setQuizzes(data);
+        // カテゴリとクイズを並行して取得
+        const [categoriesData, quizzesData] = await Promise.all([
+          fetchCategories(),
+          fetchQuizzes(),
+        ]);
+
+        setCategories(categoriesData);
+        setQuizzes(quizzesData);
       } catch (error) {
-        console.error("クイズの取得に失敗しました:", error);
+        console.error("データの取得に失敗しました:", error);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchQuizzes();
+    fetchData();
   }, []);
 
   // フィルタリング
@@ -93,7 +96,7 @@ export default function QuizzesPage() {
             >
               すべて
             </button>
-            {quizCategories.map((category) => (
+            {categories.map((category) => (
               <button
                 key={category.id}
                 className={`px-4 py-2 rounded-lg ${
