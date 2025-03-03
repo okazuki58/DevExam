@@ -1,11 +1,10 @@
 // app/ui/navbar.tsx
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/app/lib/contexts/auth-context";
 import { useRouter, usePathname } from "next/navigation";
-import { useClickAway } from "react-use";
 
 const Navbar: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -20,15 +19,33 @@ const Navbar: React.FC = () => {
     router.push("/");
   };
 
-  // メニューとボタン以外がクリックされたとき
-  useClickAway(menuRef, (event: Event) => {
-    // ボタンをクリックした場合は無視（ボタンクリックは別途処理）
-    if (buttonRef.current && buttonRef.current.contains(event.target as Node)) {
-      return;
-    }
-    // メニューを閉じる
-    setIsMenuOpen(false);
-  });
+  useEffect(() => {
+    // メニューが開いている時だけリスナーを追加
+    if (!isMenuOpen) return;
+
+    const handleClick = (event: MouseEvent) => {
+      // ボタンをクリックした場合は無視
+      if (buttonRef.current?.contains(event.target as Node)) {
+        return;
+      }
+
+      // メニュー自体のクリックは無視
+      if (menuRef.current?.contains(event.target as Node)) {
+        return;
+      }
+
+      // それ以外の場所のクリックでメニューを閉じる
+      setIsMenuOpen(false);
+    };
+
+    // ドキュメント全体にクリックリスナーを追加
+    document.addEventListener("click", handleClick);
+
+    // クリーンアップ関数
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [isMenuOpen]);
 
   // ナビゲーションリンクのスタイルを決定する関数
   const getLinkClassName = (path: string) => {
@@ -55,7 +72,7 @@ const Navbar: React.FC = () => {
             <Link href="/" className="flex-shrink-0 flex items-center">
               <span className="text-xl font-bold text-blue-700">DevExam</span>
             </Link>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
               <Link href="/" className={getLinkClassName("/")}>
                 ホーム
               </Link>
@@ -85,7 +102,7 @@ const Navbar: React.FC = () => {
               </Link>
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
+          <div className="hidden lg:ml-6 lg:flex lg:items-center">
             {user ? (
               <div className="relative">
                 <button
@@ -171,15 +188,20 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* モバイルメニューボタン */}
-          <div className="flex items-center sm:hidden">
+          <div className="flex items-center lg:hidden">
             <button
+              ref={buttonRef}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
             >
-              <span className="sr-only">メニューを開く</span>
+              <span className="sr-only">
+                メニューを{isMenuOpen ? "閉じる" : "開く"}
+              </span>
               {/* ハンバーガーアイコン */}
               <svg
-                className={`${isMenuOpen ? "hidden" : "block"} h-6 w-6`}
+                className={`${
+                  isMenuOpen ? "hidden" : "block"
+                } h-6 w-6 pointer-events-none`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -194,7 +216,9 @@ const Navbar: React.FC = () => {
               </svg>
               {/* 閉じるアイコン */}
               <svg
-                className={`${isMenuOpen ? "block" : "hidden"} h-6 w-6`}
+                className={`${
+                  isMenuOpen ? "block" : "hidden"
+                } h-6 w-6 pointer-events-none`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -213,7 +237,7 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* モバイルメニュー */}
-      <div className={`${isMenuOpen ? "block" : "hidden"} sm:hidden`}>
+      <div className={`${isMenuOpen ? "block" : "hidden"} lg:hidden`}>
         <div className="pt-2 pb-3 space-y-1">
           <Link href="/" className={getMobileLinkClassName("/")}>
             ホーム

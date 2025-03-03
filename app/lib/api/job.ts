@@ -1,53 +1,4 @@
-// クライアントサイドAPI関数
-
-// クイズ関連
-export async function fetchQuizzes() {
-  const response = await fetch("/api/quizzes");
-  if (!response.ok) throw new Error("クイズの取得に失敗しました");
-  return response.json();
-}
-
-export async function fetchQuizById(id: string) {
-  const response = await fetch(`/api/quizzes/${id}`);
-  if (!response.ok) throw new Error("クイズの取得に失敗しました");
-  return response.json();
-}
-
-export async function submitQuizResult(
-  userId: string,
-  quizId: string,
-  score: number,
-  maxScore: number
-) {
-  const response = await fetch("/api/quizzes/results", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ userId, quizId, score, maxScore }),
-  });
-
-  if (!response.ok) throw new Error("テスト結果の保存に失敗しました");
-  return response.json();
-}
-
-// 演習関連（client-exercises.ts から移行）
-export async function getExercises() {
-  const response = await fetch("/api/exercises");
-  if (!response.ok) {
-    throw new Error("演習の取得に失敗しました");
-  }
-  return response.json();
-}
-
-export async function getExerciseById(id: string) {
-  const response = await fetch(`/api/exercises/${id}`);
-  if (!response.ok) {
-    throw new Error("演習の取得に失敗しました");
-  }
-  return response.json();
-}
-
+// 求人関連API関数
 export async function getJobs(filters?: {
   category?: string;
   location?: string;
@@ -99,18 +50,10 @@ export async function getJobById(jobId: string) {
   return response.json();
 }
 
-export async function fetchCategories() {
-  const response = await fetch("/api/categories");
-  if (!response.ok) throw new Error("カテゴリの取得に失敗しました");
-  return response.json();
-}
-
-// ユーザーのテスト結果に基づいて応募可能な求人を取得する関数
 export async function getEligibleJobs() {
   const response = await fetch("/api/jobs/eligible");
   if (!response.ok) {
     throw new Error("応募資格のある求人の取得に失敗しました");
   }
-
   return response.json();
 }

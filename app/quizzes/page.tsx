@@ -5,7 +5,7 @@ import Link from "next/link";
 import Navbar from "@/app/ui/navbar";
 import { useAuth } from "@/app/lib/contexts/auth-context";
 import { Quiz, QuizCategory } from "@/app/lib/definitions";
-import { fetchCategories, fetchQuizzes } from "../lib/api-client";
+import { fetchCategories, fetchQuizzes } from "@/app/lib/api";
 
 export default function QuizzesPage() {
   const { user } = useAuth();

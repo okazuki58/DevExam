@@ -20,8 +20,9 @@ export default function ExercisesPage() {
     const fetchExercises = async () => {
       try {
         const data = await getExercises();
-        setExercises(data);
-        setFilteredExercises(data);
+        const sortedData = [...data].sort((a, b) => a.id - b.id);
+        setExercises(sortedData);
+        setFilteredExercises(sortedData);
         setIsLoading(false);
       } catch (error) {
         console.error("演習の取得に失敗しました:", error);
@@ -53,6 +54,8 @@ export default function ExercisesPage() {
           ex.tags.some((tag) => tag.toLowerCase().includes(term))
       );
     }
+
+    result = result.sort((a, b) => a.id.localeCompare(b.id));
 
     setFilteredExercises(result);
   }, [filters, exercises]);

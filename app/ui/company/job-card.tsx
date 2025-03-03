@@ -48,7 +48,7 @@ export default function JobCard({ job, company }: JobCardProps) {
         )}
 
         <div className="p-6">
-          <div className="flex justify-between items-start">
+          <div className="flex flex-col md:flex-row justify-between items-start">
             <div>
               <Link href={`/jobs/${job.id}`}>
                 <h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors hover:text-blue-700">
