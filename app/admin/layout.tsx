@@ -29,6 +29,12 @@ export default async function AdminLayout({
             ダッシュボード
           </Link>
           <Link
+            href="/admin/documents"
+            className="block py-2 px-4 rounded hover:bg-gray-700"
+          >
+            ドキュメント管理
+          </Link>
+          <Link
             href="/admin/quizzes"
             className="block py-2 px-4 rounded hover:bg-gray-700"
           >

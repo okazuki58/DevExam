@@ -70,11 +70,17 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between h-16">
           <div className="flex">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <span className="text-xl font-bold text-blue-700">DevExam</span>
+              <span className="text-xl font-bold text-blue-700">NAMINORI</span>
             </Link>
             <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
               <Link href="/" className={getLinkClassName("/")}>
                 ホーム
+              </Link>
+              <Link
+                href="/documents"
+                className={getLinkClassName("/documents")}
+              >
+                ドキュメント
               </Link>
               <Link href="/quizzes" className={getLinkClassName("/quizzes")}>
                 スキルテスト
@@ -241,6 +247,12 @@ const Navbar: React.FC = () => {
         <div className="pt-2 pb-3 space-y-1">
           <Link href="/" className={getMobileLinkClassName("/")}>
             ホーム
+          </Link>
+          <Link
+            href="/documents"
+            className={getMobileLinkClassName("/documents")}
+          >
+            ドキュメント
           </Link>
           <Link href="/quizzes" className={getMobileLinkClassName("/quizzes")}>
             スキルテスト

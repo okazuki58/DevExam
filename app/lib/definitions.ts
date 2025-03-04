@@ -200,3 +200,13 @@ export interface TestDetail {
   expected?: string;
   actual?: string;
 }
+
+export interface Document {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  headerImage?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
