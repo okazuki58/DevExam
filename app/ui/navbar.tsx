@@ -100,12 +100,6 @@ const Navbar: React.FC = () => {
               >
                 企業一覧
               </Link>
-              <Link
-                href="/leaderboard"
-                className={getLinkClassName("/leaderboard")}
-              >
-                ランキング
-              </Link>
             </div>
           </div>
           <div className="hidden lg:ml-6 lg:flex lg:items-center">
@@ -265,12 +259,6 @@ const Navbar: React.FC = () => {
             className={getMobileLinkClassName("/companies")}
           >
             企業一覧
-          </Link>
-          <Link
-            href="/leaderboard"
-            className={getMobileLinkClassName("/leaderboard")}
-          >
-            ランキング
           </Link>
         </div>
 
