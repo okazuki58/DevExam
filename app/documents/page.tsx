@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/app/ui/navbar";
 import { Document } from "@/app/lib/definitions";
+import Footer from "../ui/footer";
 
 export default function DocumentsPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
@@ -145,6 +146,8 @@ export default function DocumentsPage() {
           </div>
         )}
       </div>
+
+      <Footer />
     </>
   );
 }

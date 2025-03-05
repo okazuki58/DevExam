@@ -6,6 +6,7 @@ import Navbar from "@/app/ui/navbar";
 import { useAuth } from "@/app/lib/contexts/auth-context";
 import { Quiz, QuizCategory } from "@/app/lib/definitions";
 import { fetchCategories, fetchQuizzes } from "@/app/lib/api";
+import Footer from "../ui/footer";
 
 export default function QuizzesPage() {
   const { user } = useAuth();
@@ -216,6 +217,8 @@ export default function QuizzesPage() {
           </div>
         )}
       </div>
+
+      <Footer />
     </>
   );
 }

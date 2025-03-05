@@ -7,6 +7,7 @@ import { Job } from "@/app/lib/definitions";
 import Navbar from "@/app/ui/navbar";
 import JobCard from "@/app/ui/company/job-card";
 import Link from "next/link";
+import Footer from "../ui/footer";
 
 // 型定義
 type SalaryRange = {
@@ -404,6 +405,8 @@ export default function JobsPage() {
           </div>
         </div>
       </div>
+
+      <Footer />
     </>
   );
 }

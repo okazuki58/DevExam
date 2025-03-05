@@ -6,6 +6,7 @@ import Navbar from "@/app/ui/navbar";
 import CompanyCard from "@/app/ui/company/company-card";
 import { Company } from "@/app/lib/definitions";
 import { useRouter } from "next/navigation";
+import Footer from "../ui/footer";
 
 export default function CompaniesPage() {
   const router = useRouter();
@@ -156,6 +157,8 @@ export default function CompaniesPage() {
           </div>
         )}
       </div>
+
+      <Footer />
     </>
   );
 }

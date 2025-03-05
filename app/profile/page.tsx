@@ -14,6 +14,7 @@ import ActivityHistory from "@/app/ui/profile/ActivityHistory";
 import BadgeCollection from "@/app/ui/profile/BadgeCollection";
 import RecentActivity from "@/app/ui/profile/RecentActivity";
 import BadgePreview from "@/app/ui/profile/BadgePreview";
+import Footer from "../ui/footer";
 
 export default function ProfilePage() {
   const { data: session } = useSession();
@@ -252,6 +253,8 @@ export default function ProfilePage() {
           </div>
         </>
       )}
+
+      <Footer />
     </div>
   );
 }
