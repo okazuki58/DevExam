@@ -5,6 +5,7 @@ import { Exercise } from "@/app/lib/definitions";
 import { getExercises } from "@/app/lib/client-exercises";
 import ExerciseCard from "@/app/ui/exercise/exercise-card";
 import Navbar from "@/app/ui/navbar";
+import Footer from "../ui/footer";
 
 export default function ExercisesPage() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -189,6 +190,8 @@ export default function ExercisesPage() {
           </div>
         )}
       </div>
+
+      <Footer />
     </>
   );
 }
