@@ -1,12 +1,18 @@
-///////////// テストの型定義 /////////////
-export interface QuizQuestion {
-  id: string;
-  question: string;
-  category: string;
-  options: string[];
-  correctAnswerIndex: number;
-}
+// Prismaが自動生成した型のインポート
+import type {
+  User as PrismaUser,
+  UserProfile as PrismaUserProfile,
+  Badge as PrismaBadge,
+  QuizResult as PrismaQuizResult,
+  Quiz as PrismaQuiz,
+  Company as PrismaCompany,
+  Job as PrismaJob,
+  Exercise as PrismaExercise,
+  ExerciseSubmission as PrismaExerciseSubmission,
+  Document as PrismaDocument,
+} from "@prisma/client";
 
+// フロントエンド専用の状態管理型
 export interface QuizState {
   currentQuestionIndex: number;
   score: number;
@@ -15,34 +21,53 @@ export interface QuizState {
   questions: QuizQuestion[];
 }
 
-// ユーザー関連の型定義
-export interface User {
-  id: string;
-  username: string;
-  email: string;
+// Prisma型の拡張・再定義
+export type User = PrismaUser & {
+  profile?: UserProfile;
   badges: Badge[];
   quizResults: QuizResult[];
-  createdAt: Date;
-  lastLogin: Date;
+  jobApplications?: JobApplication[];
+};
+
+export type UserProfile = PrismaUserProfile & {
+  // ProfileTimelineコンポーネント用の拡張フィールド
+  educationItems?: { id: string; text: string }[];
+  jobItems?: { id: string; text: string }[];
+  careerChange?: string;
+  goals?: string;
+  portfolio?: string;
+  hobbies?: string;
+
+  // 詳細なデータ構造（JSONから変換後）
+  experienceDetails?: {
+    title: string;
+    company: string;
+    startDate: Date;
+    endDate?: Date;
+    description: string;
+  }[];
+  educationDetails?: {
+    institution: string;
+    degree: string;
+    field: string;
+    startDate: Date;
+    endDate?: Date;
+  }[];
+};
+
+export type Badge = PrismaBadge;
+
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  category: string;
+  options: string[];
+  correctAnswerIndex: number;
 }
 
-export interface Badge {
-  id: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-  quizId: string;
-  achievedAt: Date;
-}
-
-export interface QuizResult {
-  id: string;
-  quizId: string;
-  quizName: string;
-  score: number;
-  maxScore: number;
-  completedAt: Date;
-}
+export type QuizResult = PrismaQuizResult & {
+  quizName: string; // API応答用の追加フィールド
+};
 
 // テストカテゴリの型定義
 export interface QuizCategory {
@@ -54,51 +79,22 @@ export interface QuizCategory {
 }
 
 // テストコレクションの型定義
-export interface Quiz {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  difficulty: "easy" | "medium" | "hard";
+export type Quiz = PrismaQuiz & {
   questions: QuizQuestion[];
   badge: {
     name: string;
     description: string;
     imageUrl: string;
   };
-}
+};
 
-///////////// 求人の型定義 /////////////
-export interface Company {
-  id: string;
-  name: string;
-  description: string;
-  industry: string;
-  location: string;
-  size: string;
-  foundedYear: number;
-  email: string;
-  phone: string;
-  websiteUrl: string;
-  logoUrl: string;
-  headerImageUrl: string;
-  about?: string;
+export type Company = PrismaCompany & {
   jobCount?: number;
-  createdAt: Date;
   employeeCount?: number;
-}
+};
 
 // 求人の型定義
-export interface Job {
-  id: string;
-  companyId: string;
-  title: string;
-  description: string;
-  requirements: string[];
-  preferredSkills: string[];
-  location: string;
-  employmentType: "full-time" | "part-time" | "contract" | "internship";
-  experienceLevel: "entry" | "mid" | "senior";
+export type Job = PrismaJob & {
   salary: {
     min: number;
     max: number;
@@ -108,11 +104,7 @@ export interface Job {
     quizId: string;
     minimumScore: number;
   }[];
-  postedAt: Date;
-  updatedAt: Date;
-  isActive: boolean;
-  imageUrl?: string;
-}
+};
 
 // 応募の型定義
 export interface JobApplication {
@@ -131,52 +123,11 @@ export interface JobApplication {
   updatedAt: Date;
 }
 
-// ユーザー型定義の拡張
-export interface User {
-  // ... 既存のプロパティ
-  skills?: string[];
-  experience?: {
-    title: string;
-    company: string;
-    startDate: Date;
-    endDate?: Date;
-    description: string;
-  }[];
-  education?: {
-    institution: string;
-    degree: string;
-    field: string;
-    startDate: Date;
-    endDate?: Date;
-  }[];
-  jobApplications?: JobApplication[];
-}
+export type Exercise = PrismaExercise;
 
-export interface Exercise {
-  id: string;
-  title: string;
-  description: string;
-  difficulty: string; // "beginner" | "intermediate" | "advanced" から変更
-  category: string;
-  tags: string[];
-  testDescription?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  instructions?: string;
-  setupGuide?: string;
-  gifUrl?: string | null;
-}
-
-export interface ExerciseSubmission {
-  id: string;
-  exerciseId: string;
-  userId: string;
-  repositoryUrl: string;
-  status: string; // "pending", "completed", "failed"
+export type ExerciseSubmission = PrismaExerciseSubmission & {
   results: TestResult | null;
-  createdAt: string | Date; // createdAtを追加
-  updatedAt: string | Date;
-}
+};
 
 export interface TestResult {
   id: string;
@@ -201,12 +152,4 @@ export interface TestDetail {
   actual?: string;
 }
 
-export interface Document {
-  id: string;
-  title: string;
-  content: string;
-  category: string;
-  headerImage?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export type Document = PrismaDocument;

@@ -4,6 +4,7 @@ import { createUserData } from "./seedData/userData";
 import { exerciseData } from "./seedData/exerciseData";
 import { jobData } from "./seedData/jobData";
 import { companyData } from "./seedData/companyData";
+import { userProfileData } from "./seedData/userProfileData";
 
 const prisma = new PrismaClient();
 
@@ -56,6 +57,9 @@ async function main() {
     });
   }
   console.log(`${userData.length}件のユーザーデータを作成しました`);
+
+  // ユーザープロフィールデータの作成
+  console.log("ユーザープロフィールデータを作成中...");
 
   // 演習データの作成
   console.log("演習データを作成中...");
@@ -122,6 +126,25 @@ async function main() {
       }
     }
     console.log(`${quizzes.length}件のクイズ結果とバッジを作成しました`);
+  }
+
+  if (testUser) {
+    // ユーザープロフィールデータの作成
+    console.log("ユーザープロフィールデータを作成中...");
+
+    for (const profile of userProfileData) {
+      await prisma.userProfile.upsert({
+        where: { userId: testUser.id },
+        update: profile,
+        create: {
+          userId: testUser.id,
+          ...profile,
+        },
+      });
+    }
+    console.log(
+      `${userProfileData.length}件のユーザープロフィールデータを作成しました`
+    );
   }
 }
 

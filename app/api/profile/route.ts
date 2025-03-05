@@ -4,6 +4,7 @@ import { prisma } from "@/app/lib/prisma";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 // プロフィール情報を取得
+// プロフィール情報を取得
 export async function GET() {
   const session = await getServerSession(authOptions);
 
@@ -12,18 +13,37 @@ export async function GET() {
   }
 
   try {
+    // ユーザーとその関連データを取得
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
-      select: {
-        bio: true,
-        motivation: true,
-        githubUrl: true,
-        twitterUrl: true,
-        linkedinUrl: true,
+      include: {
+        profile: true,
+        badges: true, // バッジを明示的に含める
+        quizResults: {
+          include: {
+            quiz: true,
+          },
+          orderBy: {
+            completedAt: "desc",
+          },
+        },
       },
     });
 
-    return NextResponse.json(user);
+    // バッジデータを変換
+    const badges = user?.badges.map((badge) => ({
+      id: badge.id,
+      name: badge.name,
+      description: badge.description,
+      imageUrl: badge.imageUrl,
+      achievedAt: badge.achievedAt,
+    }));
+
+    return NextResponse.json({
+      ...user?.profile,
+      badges, // 整形したバッジデータをレスポンスに含める
+      submissions: user?.quizResults,
+    });
   } catch (error) {
     console.error("プロフィール取得エラー:", error);
     return NextResponse.json(
@@ -45,7 +65,18 @@ export async function PUT(req: NextRequest) {
     const data = await req.json();
 
     // バリデーション（簡易版）
-    const { bio, motivation, githubUrl, twitterUrl, linkedinUrl } = data;
+    const {
+      bio,
+      motivation,
+      githubUrl,
+      twitterUrl,
+      linkedinUrl,
+      skills,
+      education,
+      occupation,
+      portfolioUrl,
+      desiredRole,
+    } = data;
 
     // URLのバリデーション
     const urlPattern =
@@ -72,25 +103,56 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    // DB更新
-    const updatedUser = await prisma.user.update({
+    if (portfolioUrl && !urlPattern.test(portfolioUrl)) {
+      return NextResponse.json(
+        { error: "ポートフォリオのURLが無効です" },
+        { status: 400 }
+      );
+    }
+
+    // ユーザーを取得
+    const user = await prisma.user.findUnique({
       where: { email: session.user.email },
-      data: {
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "ユーザーが見つかりません" },
+        { status: 404 }
+      );
+    }
+
+    // UserProfileをupsert（更新または作成）
+    const updatedProfile = await prisma.userProfile.upsert({
+      where: { userId: user.id },
+      update: {
         bio,
         motivation,
         githubUrl,
         twitterUrl,
         linkedinUrl,
+        skills,
+        education,
+        occupation,
+        portfolioUrl,
+        desiredRole,
+      },
+      create: {
+        userId: user.id,
+        bio: bio || "",
+        motivation: motivation || "",
+        githubUrl: githubUrl || "",
+        twitterUrl: twitterUrl || "",
+        linkedinUrl: linkedinUrl || "",
+        skills: skills || "",
+        education: education || "",
+        occupation: occupation || "",
+        portfolioUrl: portfolioUrl || "",
+        desiredRole: desiredRole || "",
       },
     });
 
-    return NextResponse.json({
-      bio: updatedUser.bio,
-      motivation: updatedUser.motivation,
-      githubUrl: updatedUser.githubUrl,
-      twitterUrl: updatedUser.twitterUrl,
-      linkedinUrl: updatedUser.linkedinUrl,
-    });
+    return NextResponse.json(updatedProfile);
   } catch (error) {
     console.error("プロフィール更新エラー:", error);
     return NextResponse.json(
