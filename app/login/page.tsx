@@ -7,6 +7,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import Navbar from "@/app/ui/navbar";
 import GoogleBtn from "../ui/google-btn";
+import Logo from "../ui/logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -104,34 +105,7 @@ export default function LoginPage() {
           {/* 右側：ログインフォームエリア */}
           <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
             <div className="flex justify-center mx-auto">
-              <svg
-                className="w-auto h-7 sm:h-8 text-indigo-600"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 4L4 8L12 12L20 8L12 4Z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M4 12L12 16L20 12"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M4 16L12 20L20 16"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <Logo />
             </div>
 
             <p className="mt-3 text-xl text-center text-gray-600">
