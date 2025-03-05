@@ -32,7 +32,7 @@ export default function ProfilePage() {
         try {
           setLoading(true);
           // プロフィールデータの取得
-          const data = await fetchUserProfile(user.id);
+          const data = await fetchUserProfile();
           setProfileData(data);
 
           // APIからバッジとサブミッションも取得する
@@ -86,6 +86,20 @@ export default function ProfilePage() {
 
   // 最近の提出物（最新5件）
   const recentSubmissions = submissions.slice(0, 5);
+
+  // 提出物をActivity形式に変換
+  const submissionActivities = recentSubmissions.map((submission) => ({
+    id: submission.id,
+    type: "exercise_submission",
+    title: submission.title || "演習提出",
+    description: `${submission.score}点を獲得しました`,
+    timestamp:
+      submission.createdAt instanceof Date
+        ? submission.createdAt.toISOString()
+        : submission.createdAt || new Date().toISOString(),
+    url: `/exercises/${submission.exerciseId}`,
+    relatedId: submission.exerciseId,
+  }));
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -164,7 +178,7 @@ export default function ProfilePage() {
               {/* 右カラム: 最近の活動 */}
               <div className="space-y-6">
                 {/* 最近の活動 */}
-                <RecentActivity recentSubmissions={recentSubmissions} />
+                <RecentActivity activities={submissionActivities} />
 
                 {/* 獲得バッジのプレビュー */}
                 <BadgePreview badges={badges} />

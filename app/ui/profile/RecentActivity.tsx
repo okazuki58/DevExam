@@ -20,9 +20,13 @@ interface Activity {
   relatedId: string;
 }
 
-export default function RecentActivity() {
+interface RecentActivityProps {
+  activities?: Activity[];
+}
+
+export default function RecentActivity({ activities }: RecentActivityProps) {
   // モックデータの活動
-  const recentActivities = [
+  const recentActivities = activities || [
     {
       id: "1",
       type: "exercise_submission",
