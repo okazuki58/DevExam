@@ -23,183 +23,52 @@ export default function RegisterPage() {
         <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg lg:max-w-4xl">
           {/* 左側：オリジナルのSVGイラストエリア - デベロッパー試験アプリのイメージ */}
           <div className="hidden lg:flex lg:w-1/2 lg:items-center lg:justify-center bg-gradient-to-br from-indigo-600 to-indigo-800 p-8">
-            {/* カスタムイラスト - プログラミングとテストのコンセプト */}
-            <svg
-              viewBox="0 0 400 400"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-full h-auto max-w-md"
-              fill="none"
-            >
-              {/* 背景の要素（円と波形） */}
-              <circle cx="200" cy="200" r="160" fill="rgba(255,255,255,0.05)" />
-              <circle cx="200" cy="200" r="120" fill="rgba(255,255,255,0.07)" />
+            <div className="w-full max-w-md">
+              <div className="text-white text-center mb-8">
+                <h1 className="text-3xl font-bold mb-2">はじめまして！</h1>
+                <p className="text-purple-100">
+                  新しいアカウントを作成して、学習を始めましょう
+                </p>
+              </div>
 
-              {/* コードエディタのフレーム */}
-              <rect
-                x="100"
-                y="120"
-                width="200"
-                height="160"
-                rx="8"
-                fill="#ffffff"
-              />
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 shadow-xl">
+                <div className="flex justify-center mb-6">
+                  <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-12 w-12 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                      />
+                    </svg>
+                  </div>
+                </div>
 
-              {/* エディタのトップバー */}
-              <rect
-                x="100"
-                y="120"
-                width="200"
-                height="20"
-                rx="8"
-                fill="#f3f4f6"
-              />
-              <circle cx="112" cy="130" r="4" fill="#fc8181" />
-              <circle cx="128" cy="130" r="4" fill="#fbd38d" />
-              <circle cx="144" cy="130" r="4" fill="#9ae6b4" />
+                <div className="space-y-4">
+                  <div className="bg-white/20 h-10 rounded-md"></div>
+                  <div className="bg-white/20 h-10 rounded-md"></div>
+                  <div className="bg-white/20 h-10 rounded-md"></div>
+                  <div className="bg-white/30 h-12 rounded-md mt-6"></div>
+                </div>
 
-              {/* コードの行 */}
-              <rect
-                x="110"
-                y="150"
-                width="180"
-                height="6"
-                rx="3"
-                fill="#e5e7eb"
-              />
-              <rect
-                x="110"
-                y="165"
-                width="140"
-                height="6"
-                rx="3"
-                fill="#e5e7eb"
-              />
-              <rect
-                x="110"
-                y="180"
-                width="160"
-                height="6"
-                rx="3"
-                fill="#e5e7eb"
-              />
-              <rect
-                x="110"
-                y="195"
-                width="120"
-                height="6"
-                rx="3"
-                fill="#e5e7eb"
-              />
-              <rect
-                x="110"
-                y="210"
-                width="170"
-                height="6"
-                rx="3"
-                fill="#e5e7eb"
-              />
-              <rect
-                x="110"
-                y="225"
-                width="130"
-                height="6"
-                rx="3"
-                fill="#e5e7eb"
-              />
-              <rect
-                x="110"
-                y="240"
-                width="150"
-                height="6"
-                rx="3"
-                fill="#e5e7eb"
-              />
-              <rect
-                x="110"
-                y="255"
-                width="100"
-                height="6"
-                rx="3"
-                fill="#e5e7eb"
-              />
+                <div className="mt-8 flex justify-center">
+                  <div className="h-1 w-16 bg-white/30 rounded-full mx-1"></div>
+                  <div className="h-1 w-16 bg-white/30 rounded-full mx-1"></div>
+                  <div className="h-1 w-16 bg-white/30 rounded-full mx-1"></div>
+                </div>
+              </div>
 
-              {/* チェックマーク・テストのシンボル */}
-              <circle cx="280" cy="100" r="30" fill="rgba(255,255,255,0.2)" />
-              <path
-                d="M265 100L275 110L295 90"
-                stroke="#ffffff"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-
-              {/* タグ・括弧のシンボル */}
-              <path
-                d="M80 180L60 200L80 220"
-                stroke="#ffffff"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M320 180L340 200L320 220"
-                stroke="#ffffff"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-
-              {/* 電球（アイデア・学習のシンボル） */}
-              <circle cx="200" cy="60" r="25" fill="rgba(255,255,255,0.15)" />
-              <path
-                d="M200 40 L200 55"
-                stroke="#ffffff"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-              <path
-                d="M180 60 L190 60"
-                stroke="#ffffff"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-              <path
-                d="M210 60 L220 60"
-                stroke="#ffffff"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-              <path
-                d="M185 45 L195 55"
-                stroke="#ffffff"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-              <path
-                d="M215 45 L205 55"
-                stroke="#ffffff"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-
-              {/* 下部の要素 */}
-              <rect
-                x="140"
-                y="300"
-                width="120"
-                height="8"
-                rx="4"
-                fill="rgba(255,255,255,0.2)"
-              />
-              <rect
-                x="160"
-                y="315"
-                width="80"
-                height="8"
-                rx="4"
-                fill="rgba(255,255,255,0.15)"
-              />
-            </svg>
+              <div className="text-center mt-8 text-white/60 text-sm">
+                シンプルな手順でアカウント作成が完了します
+              </div>
+            </div>
           </div>
 
           {/* 右側：登録フォームエリア */}
