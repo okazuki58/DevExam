@@ -1,5 +1,6 @@
 "use client";
 
+import { Activity } from "@/app/lib/definitions";
 import Link from "next/link";
 import {
   FaCodeBranch,
@@ -9,16 +10,6 @@ import {
   FaGithub,
   FaCommentAlt,
 } from "react-icons/fa";
-
-interface Activity {
-  id: string;
-  type: string; // "exercise_submission", "course_progress", "badge_earned", "comment"
-  title: string;
-  description: string;
-  timestamp: string;
-  url?: string;
-  relatedId: string;
-}
 
 interface RecentActivityProps {
   activities?: Activity[];
@@ -30,49 +21,64 @@ export default function RecentActivity({ activities }: RecentActivityProps) {
     {
       id: "1",
       type: "exercise_submission",
-      title: "JavaScript基礎演習を提出しました",
-      description:
-        "配列操作とDOMイベントを使用したJavaScriptの基礎課題を完了しました。",
+      entityId: "ex-123",
+      entityTitle: "JavaScript基礎演習を提出しました",
+      entityType: "exercise",
+      userId: "user-1",
       timestamp: "2023-09-15T14:32:00Z",
-      url: "https://github.com/username/js-basics-exercise",
-      relatedId: "ex-123",
+      details: {
+        score: 85,
+        url: "https://github.com/username/js-basics-exercise",
+      },
+      status: "completed",
     },
     {
       id: "2",
       type: "course_progress",
-      title: "HTML/CSSコースを60%完了",
-      description:
-        "レスポンシブデザインのセクションまで完了しました。Flexboxとグリッドレイアウトの実践演習に取り組んでいます。",
+      entityId: "course-456",
+      entityTitle: "HTML/CSSコースを60%完了",
+      entityType: "course",
+      userId: "user-1",
       timestamp: "2023-09-12T09:15:00Z",
-      relatedId: "course-456",
+      details: {
+        progress: 60,
+      },
     },
     {
       id: "3",
       type: "badge_earned",
-      title: "Git基礎バッジを獲得しました",
-      description:
-        "バージョン管理システムの基本操作とブランチ戦略の理解が認められました。",
+      entityId: "badge-789",
+      entityTitle: "Git基礎バッジを獲得しました",
+      entityType: "badge",
+      userId: "user-1",
       timestamp: "2023-09-10T16:45:00Z",
-      relatedId: "badge-789",
     },
     {
       id: "4",
       type: "comment",
-      title: "ディスカッションに参加しました",
-      description:
-        "「JavaScriptのプロミスとasync/await」のディスカッションでコメントしました。",
+      entityId: "disc-101",
+      entityTitle: "ディスカッションに参加しました",
+      entityType: "discussion",
+      userId: "user-1",
       timestamp: "2023-09-08T11:20:00Z",
-      relatedId: "disc-101",
+      details: {
+        content:
+          "「JavaScriptのプロミスとasync/await」のディスカッションでコメントしました。",
+      },
     },
     {
       id: "5",
       type: "exercise_submission",
-      title: "Reactコンポーネント課題を提出",
-      description:
-        "フックを使用した状態管理とカスタムコンポーネントの作成課題を完了しました。",
+      entityId: "ex-112",
+      entityTitle: "Reactコンポーネント課題を提出",
+      entityType: "exercise",
+      userId: "user-1",
       timestamp: "2023-09-05T15:10:00Z",
-      url: "https://github.com/username/react-components-exercise",
-      relatedId: "ex-112",
+      details: {
+        score: 92,
+        url: "https://github.com/username/react-components-exercise",
+      },
+      status: "completed",
     },
   ];
 
@@ -94,13 +100,13 @@ export default function RecentActivity({ activities }: RecentActivityProps) {
   const getActivityLink = (activity: Activity) => {
     switch (activity.type) {
       case "exercise_submission":
-        return `/exercises/${activity.relatedId}`;
+        return `/exercises/${activity.entityId}`;
       case "course_progress":
-        return `/courses/${activity.relatedId}`;
+        return `/courses/${activity.entityId}`;
       case "badge_earned":
         return "#badges";
       case "comment":
-        return `/discussions/${activity.relatedId}`;
+        return `/discussions/${activity.entityId}`;
       default:
         return "#";
     }
@@ -148,7 +154,7 @@ export default function RecentActivity({ activities }: RecentActivityProps) {
                 <div className="flex-grow min-w-0">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-medium text-gray-900">
-                      {activity.title}
+                      {activity.entityTitle}
                     </span>
                     <span className="text-xs text-gray-500 ml-2">
                       {formatDate(activity.timestamp)}
@@ -156,13 +162,17 @@ export default function RecentActivity({ activities }: RecentActivityProps) {
                   </div>
 
                   <p className="text-sm text-gray-600 line-clamp-2">
-                    {activity.description}
+                    {activity.details?.score &&
+                      `スコア: ${activity.details.score}`}
+                    {activity.details?.progress &&
+                      `進捗: ${activity.details.progress}%`}
+                    {activity.details?.content && activity.details.content}
                   </p>
 
-                  {activity.url && (
+                  {activity.details?.url && (
                     <div className="flex items-center text-sm text-gray-500 mt-2 truncate">
                       <FaGithub className="mr-1.5 text-gray-400" />
-                      <span className="truncate">{activity.url}</span>
+                      <span className="truncate">{activity.details.url}</span>
                     </div>
                   )}
                 </div>

@@ -118,9 +118,9 @@ export default function ProfileHeader({
       {/* コンテンツコンテナ */}
       <div className="relative max-w-6xl mx-auto px-6 lg:px-8 pt-16 pb-12">
         <div className="flex flex-col md:flex-row md:items-end gap-8">
-          {/* アバター - より大きく、高品質な表示 */}
+          {/* アバター - サイズを小さく */}
           <div className="flex-shrink-0">
-            <div className="relative h-36 w-36 rounded-xl overflow-hidden shadow-xl border-4 border-white/30 backdrop-blur-sm">
+            <div className="relative h-32 w-32 rounded-xl overflow-hidden shadow-xl border-4 border-white/30 backdrop-blur-sm">
               <Image
                 src="/user/user2.png"
                 alt={user.name || "ユーザー"}
@@ -133,15 +133,15 @@ export default function ProfileHeader({
             </div>
           </div>
 
-          {/* ユーザー情報 - 改良されたタイポグラフィー */}
+          {/* ユーザー情報 - 名前を大きく、IDを小さく */}
           <div className="flex-grow">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-white tracking-tight">
+                <h1 className="text-4xl font-bold text-white tracking-tight">
                   Ogawa Kazuki
                 </h1>
 
-                <p className="text-lg text-indigo-200 mt-1 font-medium">
+                <p className="text-base text-indigo-200 mt-1 font-medium">
                   @{user.id || "username"}
                 </p>
               </div>

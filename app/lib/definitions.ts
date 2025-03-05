@@ -37,6 +37,7 @@ export type UserProfile = PrismaUserProfile & {
   goals?: string;
   portfolio?: string;
   hobbies?: string;
+  totalStudyTime?: number;
 
   // 詳細なデータ構造（JSONから変換後）
   experienceDetails?: {
@@ -153,3 +154,26 @@ export interface TestDetail {
 }
 
 export type Document = PrismaDocument;
+
+// ... existing code ...
+
+export interface Activity {
+  id: string;
+  type: string;
+  entityId: string;
+  entityTitle: string;
+  entityType?: string;
+  userId: string;
+  timestamp: string;
+  details?: {
+    score?: number;
+    duration?: number;
+    progress?: number;
+    url?: string;
+    content?: string;
+    // インデックスシグネチャを削除
+  };
+  status?: string;
+}
+
+// ... existing code ...

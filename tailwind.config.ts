@@ -18,14 +18,9 @@ module.exports = {
           900: "#1a237e",
         },
       },
-    },
-    gridTemplateColumns: {
-      "30": "repeat(30, minmax(0, 1fr))",
-      "50": "repeat(50, minmax(0, 1fr))",
-      "84": "repeat(84, minmax(0, 1fr))",
-    },
-    fontSize: {
-      xxs: "0.625rem", // 10px
+      fontSize: {
+        xxs: "0.625rem", // 10px
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
