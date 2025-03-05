@@ -2,17 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { Badge, QuizResult } from "../definitions";
-
-// User型を拡張
-interface ExtendedUser {
-  id?: string;
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-  badges?: Badge[];
-  quizResults?: QuizResult[];
-}
+import { ExtendedUser } from "../definitions";
 
 const AuthContext = createContext<{
   user: ExtendedUser | null;
@@ -42,11 +32,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (response.ok) {
             const { badges, quizResults } = await response.json();
             // 取得したデータで更新
-            setUser((prev) => ({
-              ...prev,
-              badges,
-              quizResults,
-            }));
+            setUser(
+              (prev) =>
+                ({
+                  ...prev,
+                  badges,
+                  quizResults,
+                } as ExtendedUser)
+            );
           }
         } else {
           setUser(null);

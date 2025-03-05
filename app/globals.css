@@ -13,32 +13,115 @@
   .quiz-option {
     @apply p-4 border-2 border-gray-200 rounded-lg cursor-pointer transition-all hover:bg-blue-50 hover:border-blue-600;
   }
-  
+
   .quiz-option.selected {
     @apply bg-blue-600 text-white border-blue-600;
   }
-  
+
   .quiz-option.correct {
     @apply bg-green-500 text-white border-green-500;
   }
-  
+
   .quiz-option.incorrect {
     @apply bg-red-500 text-white border-red-500;
   }
-  
+
   .btn {
     @apply px-6 py-3 rounded-lg font-medium transition-colors;
   }
-  
+
   .btn-primary {
     @apply bg-blue-600 text-white hover:bg-blue-700;
   }
-  
+
   .btn-secondary {
     @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
   }
-  
+
   .btn-disabled {
     @apply bg-gray-200 text-gray-400 cursor-not-allowed;
   }
+}
+
+.tip {
+  background-color: #f0f8f0;
+  border-left: 3px solid #a8d8a8;
+  padding: 12px;
+  margin: 40px 0 12px 0;
+  border-radius: 3px;
+  font-size: 0.9rem;
+}
+
+.tip-header {
+  display: flex;
+  align-items: center;
+}
+
+.tip-header h2 {
+  font-size: 1rem;
+  margin: 0;
+  margin-right: 10px;
+  color: #3c7a3c;
+}
+
+.tip-header p {
+  margin: 0;
+  color: #4a664a;
+}
+
+.tip ul {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+pre {
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  padding: 16px;
+  overflow: auto;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo,
+    monospace;
+  font-size: 0.9em;
+}
+
+/* 折りたたみスタイル */
+details {
+  padding: 1rem;
+  margin: 1rem 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background-color: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+details:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+summary {
+  padding: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  color: #3b82f6;
+  display: flex;
+  align-items: center;
+}
+
+summary::before {
+  content: "▶";
+  margin-right: 0.5rem;
+  transition: transform 0.2s;
+  font-size: 0.8rem;
+}
+
+details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+details[open] {
+  background-color: #f1f5f9;
 }

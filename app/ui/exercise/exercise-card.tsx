@@ -36,10 +36,14 @@ export default function ExerciseCard({ exercise }: { exercise: Exercise }) {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
       <div className="p-6">
-        <div className="flex justify-between items-start mb-3">
-          <h2 className="text-xl font-bold text-gray-900">{exercise.title}</h2>
+        <div className="flex justify-between items-start mb-3 mr-1">
+          <Link href={`/exercises/${exercise.id}`} className="hover:underline">
+            <h2 className="text-xl font-bold text-gray-900">
+              {exercise.title}
+            </h2>
+          </Link>
           <span
-            className={`px-2 py-1 rounded-full text-xs font-medium ${difficultyColor}`}
+            className={`px-2 py-1 rounded-full text-xs font-medium flex-shrink-0 ${difficultyColor}`}
           >
             {difficultyDisplay}
           </span>

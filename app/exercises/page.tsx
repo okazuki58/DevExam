@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { Exercise } from "@/app/lib/definitions";
-import { getExercises } from "@/app/lib/exercises";
+import { getExercises } from "@/app/lib/client-exercises";
 import ExerciseCard from "@/app/ui/exercise/exercise-card";
 import Navbar from "@/app/ui/navbar";
+import Footer from "../ui/footer";
 
 export default function ExercisesPage() {
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -20,8 +21,9 @@ export default function ExercisesPage() {
     const fetchExercises = async () => {
       try {
         const data = await getExercises();
-        setExercises(data);
-        setFilteredExercises(data);
+        const sortedData = [...data].sort((a, b) => a.id - b.id);
+        setExercises(sortedData);
+        setFilteredExercises(sortedData);
         setIsLoading(false);
       } catch (error) {
         console.error("演習の取得に失敗しました:", error);
@@ -53,6 +55,8 @@ export default function ExercisesPage() {
           ex.tags.some((tag) => tag.toLowerCase().includes(term))
       );
     }
+
+    result = result.sort((a, b) => a.id.localeCompare(b.id));
 
     setFilteredExercises(result);
   }, [filters, exercises]);
@@ -186,6 +190,8 @@ export default function ExercisesPage() {
           </div>
         )}
       </div>
+
+      <Footer />
     </>
   );
 }

@@ -18,6 +18,9 @@ module.exports = {
           900: "#1a237e",
         },
       },
+      fontSize: {
+        xxs: "0.625rem", // 10px
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],

@@ -8,9 +8,9 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?      @unique
   emailVerified DateTime?
   password      String?
   image         String?
@@ -18,9 +18,90 @@ model User {
   sessions      Session[]
   badges        Badge[]
   quizResults   QuizResult[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  role          String?   @default("user")
+  profile       UserProfile?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  role          String?      @default("user")
+  exerciseSubmissions ExerciseSubmission[]
+}
+
+model UserProfile {
+  id           String        @id @default(cuid())
+  userId       String        @unique
+  bio          String?       @db.Text
+  motivation   String?       @db.Text
+  githubUrl    String?
+  twitterUrl   String?
+  linkedinUrl  String?
+  education    String?
+  occupation   String?
+  portfolioUrl String?
+  desiredRole  String?
+  skills       String?       @db.Text
+  
+  // タイムラインコンポーネントで使用するフィールド
+  careerChange String?       @db.Text  // キャリアチェンジの理由
+  goals        String?       @db.Text  // 入社後の目標
+  portfolio    String?       @db.Text  // ポートフォリオ詳細テキスト
+  hobbies      String?       // 趣味・特技
+  
+  // JSON形式で保存するフィールド
+  educationItems Json?       // 学歴リスト [{ id: string, text: string }]
+  jobItems      Json?       // 職歴リスト [{ id: string, text: string }]
+  learningStats Json?       // 学習統計情報
+
+  // 既存のリレーション
+  experiences  Experience[]  // 職歴情報
+  educations   Education[]   // 学歴情報
+  projects     Project[]     // 個人プロジェクト
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+// 職歴情報
+model Experience {
+  id          String      @id @default(cuid())
+  profileId   String
+  title       String      // 役職
+  company     String      // 会社名
+  description String?     @db.Text // 業務内容
+  startDate   DateTime    // 開始日
+  endDate     DateTime?   // 終了日（現職の場合はnull）
+  isCurrent   Boolean     @default(false) // 現職かどうか
+  profile     UserProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+// 学歴情報
+model Education {
+  id          String      @id @default(cuid())
+  profileId   String
+  institution String      // 学校名
+  degree      String?     // 学位
+  field       String?     // 専攻
+  description String?     @db.Text // 詳細
+  startDate   DateTime    // 開始日
+  endDate     DateTime?   // 終了日
+  profile     UserProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+// 個人プロジェクト
+model Project {
+  id          String      @id @default(cuid())
+  profileId   String
+  title       String      // プロジェクト名
+  description String      @db.Text // 詳細
+  imageUrl    String?     // プロジェクト画像
+  url         String?     // プロジェクトURL
+  startDate   DateTime    // 開始日
+  endDate     DateTime?   // 終了日
+  profile     UserProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 model Account {
@@ -58,13 +139,16 @@ model VerificationToken {
 }
 
 model Exercise {
-  id          String    @id @default(cuid())
-  title       String
-  description String
-  difficulty  String    // "beginner", "intermediate", "advanced"
-  // submissions ExerciseSubmission[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id             String   @id
+  title          String
+  description    String
+  difficulty     String
+  category       String
+  tags           String[]
+  testDescription String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  gifUrl         String?
 }
 
 model ExerciseSubmission {
@@ -72,10 +156,20 @@ model ExerciseSubmission {
   exerciseId   String
   userId       String
   repositoryUrl String
+  
+  // 追加フィールド
+  title        String?    // 演習タイトル
+  content      String?    @db.Text // 提出内容
+  score        Int?       // 得点
+  feedback     String?    @db.Text // フィードバック
+  language     String?    // プログラミング言語
+  
   status       String    // "pending", "completed", "failed"
   results      String?   // JSON形式のテスト結果
+  
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   // exercise     Exercise  @relation(fields: [exerciseId], references: [id])
-  // user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 }
@@ -95,17 +189,21 @@ model QuizResult {
 model Badge {
   id          String   @id @default(cuid())
   userId      String
-  quizId      String
+  quizId      String?   // オプショナルに変更（クイズ以外でもバッジ獲得可能に）
   name        String
   description String
   imageUrl    String
   achievedAt  DateTime @default(now())
+
+  category    String?   // バッジのカテゴリ
+  level       String?   // 難易度や等級
+  
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quiz        Quiz     @relation(fields: [quizId], references: [id])
+  quiz        Quiz?    @relation(fields: [quizId], references: [id]) // オプショナルに変更
 }
 
 model Quiz {
-  id          String       @id @default(cuid())
+  id          String       @id
   name        String
   description String
   category    String
@@ -137,6 +235,67 @@ model QuizBadge {
   name        String
   description String
   imageUrl    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Company {
+  id          String    @id @default(cuid())
+  name        String
+  description String?   @db.Text
+  industry    String?
+  logoUrl     String?
+  headerImageUrl String?
+  websiteUrl  String?
+  location    String?
+  size        String?   // "startup", "small", "medium", "large", "enterprise"
+  foundedYear Int?
+  email       String?
+  phone       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  jobs        Job[]
+  employeeCount Int?
+}
+
+model Job {
+  id              String    @id @default(cuid())
+  companyId       String
+  title           String
+  description     String    @db.Text
+  requirements    String[]
+  preferredSkills String[]
+  location        String
+  employmentType  String    // "full-time", "part-time", "contract"
+  experienceLevel String    // "entry", "mid", "senior" 
+  salary          Json      // { min: number, max: number, currency: string }
+  requiredQuizzes Json[]    // [{ quizId: string, minimumScore: number }]
+  postedAt        DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  isActive        Boolean   @default(true)
+  imageUrl        String?
+  
+  // Company モデルとのリレーション
+  company        Company   @relation(fields: [companyId], references: [id])
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  imageUrl    String?
+  quizCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+
+model Document {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   @db.Text
+  category    String
+  headerImage String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
