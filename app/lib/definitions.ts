@@ -29,6 +29,18 @@ export type User = PrismaUser & {
   jobApplications?: JobApplication[];
 };
 
+export type ExtendedUser = {
+  id: string;
+  name: string | null;
+  email: string | null;
+  emailVerified: Date | null;
+  password: string | null;
+  image: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  role: string | null;
+};
+
 export type UserProfile = PrismaUserProfile & {
   // ProfileTimelineコンポーネント用の拡張フィールド
   educationItems?: { id: string; text: string }[];
