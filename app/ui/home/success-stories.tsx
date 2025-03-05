@@ -1,3 +1,5 @@
+import { FaUser } from "react-icons/fa";
+
 export default function SuccessStories() {
   const stories = [
     {
@@ -53,19 +55,8 @@ export default function SuccessStories() {
               <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
               <div className="p-8">
                 <div className="flex items-center mb-6">
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden mr-4 border-2 border-blue-100">
-                    {/* 実際のプロジェクトでは、実際の画像を使用します */}
-                    <div className="absolute inset-0 bg-blue-100 flex items-center justify-center text-blue-500">
-                      {story.name.charAt(0)}
-                    </div>
-                    {/* 実際の画像がある場合
-                    <Image
-                      src={story.image}
-                      alt={story.name}
-                      fill
-                      className="object-cover"
-                    />
-                    */}
+                  <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mr-4 border-2 border-blue-100 flex-shrink-0">
+                    <FaUser className="w-8 h-8 text-blue-500" />
                   </div>
                   <div>
                     <h3 className="font-bold text-lg">{story.name}</h3>

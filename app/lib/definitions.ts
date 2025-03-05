@@ -189,5 +189,3 @@ export interface Activity {
   };
   status?: string;
 }
-
-// ... existing code ...

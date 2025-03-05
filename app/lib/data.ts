@@ -35,3 +35,21 @@ export async function updateUserProfile(userId: string, data: UserProfile) {
 
   return response.json();
 }
+
+// 特定ユーザーのプロフィール取得関数
+export async function fetchUserProfileById(userId: string) {
+  try {
+    const response = await fetch(`/api/profile/${userId}`);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("API エラー詳細:", errorData);
+      throw new Error(`Failed to fetch profile: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("プロフィール取得エラー詳細:", error);
+    throw new Error("Failed to fetch profile");
+  }
+}

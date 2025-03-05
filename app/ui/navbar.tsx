@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between h-16">
           <div className="flex">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <span className="text-xl font-bold text-blue-700">NAMINORI</span>
+              <span className="text-xl font-bold text-blue-700">DevExam</span>
             </Link>
             <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
               <Link href="/" className={getLinkClassName("/")}>

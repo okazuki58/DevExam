@@ -13,6 +13,7 @@ import {
   FaPlus,
   FaTrash,
   FaEdit,
+  FaPencilAlt,
 } from "react-icons/fa";
 
 interface ProfileTimelineProps {
@@ -34,7 +35,8 @@ interface JobItem {
 export default function ProfileTimeline({
   profileData,
   updateProfile,
-}: ProfileTimelineProps) {
+  isReadOnly = false,
+}: ProfileTimelineProps & { isReadOnly?: boolean }) {
   // 項目ごとの編集状態を管理
   const [editingField, setEditingField] = useState<string | null>(null);
 
@@ -206,47 +208,23 @@ export default function ProfileTimeline({
     }
   };
 
-  const handleSave = async (field: string) => {
-    try {
-      const updatedData = {
-        ...profileData,
-        [field]: formData[field as keyof typeof formData],
-      };
-
-      await updateProfile(updatedData as UserProfile);
-      setEditingField(null);
-    } catch (error) {
-      console.error("プロフィール更新エラー:", error);
-    }
+  const handleStartEditing = (field: string) => {
+    setEditingField(field);
   };
 
-  const handleCancel = (field: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: profileData[field as keyof typeof profileData] || "",
-    }));
-    setEditingField(null);
-    setEditingItem(null);
-  };
+  const renderEditButton = (field: string) => {
+    if (isReadOnly) return null;
 
-  const renderEditButtons = (field: string) => (
-    <div className="flex space-x-2 mt-2">
+    return (
       <button
-        onClick={() => handleCancel(field)}
-        className="px-3 py-1.5 border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-sm flex items-center gap-1"
+        onClick={() => handleStartEditing(field)}
+        className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center"
       >
-        <FaTimes size={12} />
-        <span>キャンセル</span>
+        <FaPencilAlt className="mr-1" size={12} />
+        編集
       </button>
-      <button
-        onClick={() => handleSave(field)}
-        className="px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-700 hover:to-indigo-900 text-white rounded-lg transition-colors text-sm flex items-center gap-1 shadow-sm"
-      >
-        <FaCheck size={12} />
-        <span>保存</span>
-      </button>
-    </div>
-  );
+    );
+  };
 
   const renderItemEditButtons = () => (
     <div className="flex space-x-2 mt-2">
@@ -522,7 +500,7 @@ export default function ProfileTimeline({
                 className="w-full p-2 border border-indigo-200 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white transition-all"
                 placeholder={placeholders.careerChange}
               />
-              {renderEditButtons("careerChange")}
+              {renderEditButton("careerChange")}
             </div>
           ) : (
             <div
@@ -564,7 +542,7 @@ export default function ProfileTimeline({
                 className="w-full p-2 border border-indigo-200 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white transition-all"
                 placeholder={placeholders.goals}
               />
-              {renderEditButtons("goals")}
+              {renderEditButton("goals")}
             </div>
           ) : (
             <div
@@ -608,7 +586,7 @@ export default function ProfileTimeline({
                   className="w-full p-2 border border-indigo-200 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white transition-all"
                   placeholder={placeholders.portfolio}
                 />
-                {renderEditButtons("portfolio")}
+                {renderEditButton("portfolio")}
               </div>
             ) : (
               <div
@@ -647,7 +625,7 @@ export default function ProfileTimeline({
                     placeholder={placeholders.portfolioUrl}
                   />
                 </div>
-                {renderEditButtons("portfolioUrl")}
+                {renderEditButton("portfolioUrl")}
               </div>
             ) : (
               <div
@@ -693,7 +671,7 @@ export default function ProfileTimeline({
                 className="w-full p-2 border border-indigo-200 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white transition-all"
                 placeholder={placeholders.hobbies}
               />
-              {renderEditButtons("hobbies")}
+              {renderEditButton("hobbies")}
             </div>
           ) : (
             <div
