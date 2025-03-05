@@ -39,6 +39,8 @@ export type ExtendedUser = {
   createdAt: Date;
   updatedAt: Date;
   role: string | null;
+  badges?: Badge[];
+  quizResults?: QuizResult[];
 };
 
 export type UserProfile = PrismaUserProfile & {
